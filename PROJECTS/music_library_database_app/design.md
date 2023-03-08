@@ -104,3 +104,19 @@ end
 Write the route and web server code to implement the route behaviour.
 
 <!-- BEGIN GENERATED SECTION DO NOT EDIT -->
+
+For this challenge, you should only record the 3rd part where you create the diagram. Make sure you also record yourself talking out loud when making the diagram, to explain it.
+
+Test-drive and implement the following changes to the music_library_database_app project.
+
+Test-drive a route GET /artists/:id which returns an HTML page showing details for a single artist.
+
+Test-drive a route GET /artists which returns an HTML page with the list of artists. This page should contain a link for each artist listed, linking to /artists/:id where :id needs to be the corresponding artist id.
+Create a sequence diagram explaining the behaviour of your program when a request is sent to GET /artists/:id. Make sure your diagram all includes the following:
+The HTTP Client
+The HTTP Request and the data it contains
+The HTTP Response and the data it contains
+The Application class (app.rb)
+The Repository class (artist_repository.rb)
+The View (ERB file)
+The Database

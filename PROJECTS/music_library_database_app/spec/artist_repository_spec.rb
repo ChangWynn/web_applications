@@ -11,9 +11,10 @@ describe ArtistRepository do
   before(:each) do 
     reset_artists_table
   end
-  after(:each) do 
-    reset_artists_table
-  end
+  # after(:context) do 
+  #   reset_artists_table
+  # end
+
 
   it 'finds all artists' do
     repo = ArtistRepository.new
