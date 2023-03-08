@@ -69,3 +69,6 @@ class Application < Sinatra::Base
   #   return "Artist successfully added"
   # end
 end
+
+
+

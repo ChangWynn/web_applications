@@ -3,7 +3,7 @@
     <h1>Artists</h1>
     <% @artists.each do |artist| %>
       <a href="/artists/<%= artist.id %>"><%= artist.name %></a>
-      <p>Genre: artist.genre</p>
+      <p>Genre: <%= artist.genre %></p>
     <% end %>
   </body>
 </html>

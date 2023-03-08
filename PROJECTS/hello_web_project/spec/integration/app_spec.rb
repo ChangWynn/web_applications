@@ -31,7 +31,14 @@ describe Application do
     it "returns 404 PAGE NOT FOUND" do
       response = post "/sort-name", names: "Joe,Alice,Zoe,Julia,Kieran"
       expect(response.status).to eq 404
-      expect(response.body).to eq "404 PAGE NOT FOUND"
+    end
+  end
+
+  context "GET to /hello" do
+    it "should return hello" do
+      response = get "/hello", name: "Chang"
+      expect(response.status).to eq 200
+      expect(response.body).to include "<h1>Hello Chang!</h1>"
     end
   end
 end

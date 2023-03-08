@@ -36,7 +36,15 @@ class Application < Sinatra::Base
   post '/sort-names' do
     names = params[:names]
     sorted_names = names.split(",").sort.join(",")
-    return "#{Sinatra::Base.methods}"
+    return "#{sorted_names}"
+  end
+
+  get "/hello" do
+    @name = "Chang"
+    return erb(:index)
   end
 end
+
+
+
 
