@@ -27,6 +27,24 @@ describe Application do
   end
 
   # ------------------------
+  # TEST /
+  # ------------------------
+
+  context "GET to /" do
+    it "should return the home page" do
+      response = get "/"
+      expect(response.status).to eq 200
+      expect(response.body).to include "<h1>MUSIC LIBRARY</h1>"
+    end
+    it "should contain links to see all albums or all artists" do
+      response = get "/"
+      expect(response.status).to eq 200
+      expect(response.body).to include '<a href="/albums">My albums</a>'
+      expect(response.body).to include '<a href="/artists">My artists</a>'
+    end
+  end
+
+  # ------------------------
   # TEST ALBUMS METHOD
   # ------------------------
 
@@ -41,7 +59,6 @@ describe Application do
       expect(response.body).to include "Here Comes the Sun"
       expect(response.body).to include "Released: 1971"
     end
-
     it "should contain a link to each album page" do
       response = get "/albums"
       expect(response.status).to eq 200
@@ -51,7 +68,7 @@ describe Application do
     end
   end
 
-  context "GET /albums/1" do
+  context "GET to /albums/1" do
     it "should return an album details in erb" do
       response = get "/albums/1"
       expect(response.status).to eq 200
@@ -61,7 +78,7 @@ describe Application do
     end
   end
 
-  context "GET /albums/2" do
+  context "GET to /albums/2" do
     it "should return an album details in erb" do
       response = get "/albums/2"
       expect(response.status).to eq 200
@@ -71,12 +88,27 @@ describe Application do
     end 
   end
 
-  # context "POST /albums" do
-  #   it "shoud add a new album in the repository" do
-  #     response = post '/albums', title: "Voyage", release_year: 2022, artist_id: 2
-  #     expect(response.status).to eq 200
-  #   end
-  # end
+  context "GET to /albums/new" do
+    it "should take the user to the form page" do
+      response = get "/albums/new"
+      expect(response.status).to eq 200
+      expect(response.body).to include "<h1>Add a new album</h1>"
+      expect(response.body).to include '<input type="text" name="title" id="title">'
+      expect(response.body).to include '<input type="text" name="release_year" id="release_year">'
+      expect(response.body).to include '<input type="text" name="artist_id" id="artist_id">'
+    end
+  end
+
+  context "POST to /albums" do
+    it "should add an album to the database and return a feedback message" do
+      response = post "/albums", title: "8 mile"
+      expect(response.status).to eq 200
+      expect(response.body).to include "<h1>8 mile has been succesfully added to the library</h1>"
+      
+    end
+  end
+
+
 
   # ------------------------
   # TEST ARTISTS METHOD
@@ -108,14 +140,25 @@ describe Application do
     end
   end
 
-  # context "POST /artist" do
-  #   it "should add a new artist to the table" do
-  #     response = post "/artists", name: "Wild Nothing", genre: "Indie"
-  #     expected_response = get "/artists"
+  context "GET to /artists/new" do
+    it "should take the user to the new artist form page" do
+      response = get "/artists/new"
+      expect(response.status).to eq 200
+      expect(response.body).to include "<h1>Add a new artist</h1>"
+      expect(response.body).to include '<input type="text" name="name" id="name">'
+      expect(response.body).to include '<input type="text" name="genre" id="genre">'
+    end
+    it "should return 400 bad request when wrong params are sent" do
+      response = post "/artists", title: "8 mile", release_year: 2002, artist_id: 2
+      expect(response.status).to eq 400
+    end
+    it "should return 200 OK and a feedback message" do
+      response = post "/artists", name: "Eminem", genre: "Hip Hop"
+      expect(response.status).to eq 200
+      expect(response.body).to include "<h1>Eminem has been succesfully added to the library</h1>"
 
-  #     expect(response.status).to eq 200
-  #     expect(response.body).to eq "Artist successfully added"
-  #     expect(expected_response.body).to eq "Pixies, ABBA, Taylor Swift, Nina Simone, Wild Nothing"
-  #   end
-  # end
+      response = get "/artists"
+      expect(response.body).to include 'Eminem'
+    end
+  end
 end

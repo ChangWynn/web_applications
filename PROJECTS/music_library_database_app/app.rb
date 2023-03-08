@@ -14,14 +14,33 @@ class Application < Sinatra::Base
     also_reload 'lib/artist_repository'
   end
 
+  get "/" do
+    return erb(:index)
+  end
+
+
   # ------------------------
   # ALBUMS METHOD
   # ------------------------
 
+  post "/albums" do
+    @album = Album.new
+    album_repo = AlbumRepository.new
+    @album.title = params[:title]
+    @album.release_year = params[:release_year]
+    @album.artist_id = params[:artist_id]
+    album_repo.create(@album)
+    return erb(:"albums/added")
+  end
+  
+  get "/albums/new" do
+    return erb(:"albums/new_album")
+  end
+
   get "/albums" do
     album_repo = AlbumRepository.new
     @albums = album_repo.all
-    return erb(:albums)
+    return erb(:"albums/all")
   end
 
   get "/albums/:id" do
@@ -30,44 +49,41 @@ class Application < Sinatra::Base
     @album = album_repo.find(params[:id])
     @artist = artist_repo.find(@album.artist_id)
 
-    return erb(:album)
+    return erb(:"albums/album")
   end
-
-  # post "/albums" do
-  #   repo = AlbumRepository.new
-  #   album = Album.new
-  #   album.title = params[:title]
-  #   album.release_year = params[:release_year]
-  #   album.artist_id = params[:artist_id]
-  #   repo.create(album)
-  #   return "Artist successfully added"
-  # end
 
   # ------------------------
   # ARTISTS METHOD
   # ------------------------
 
+  get "/artists/new" do
+    return erb :"artists/new"
+  end
+
+  post "/artists" do
+    key = [:name, :genre]
+    key.each { |k| return status 400 if params[k] == nil }
+    p key
+    artist_repo = ArtistRepository.new
+    @artist = Artist.new
+    @artist.name = params[:name]
+    @artist.genre = params[:genre]
+    artist_repo.create(@artist)
+    return erb(:"artists/added")
+  end
+
   get "/artists" do
     repo = ArtistRepository.new
     @artists = repo.all
-    return erb(:artists)
+    return erb(:"artists/all")
   end
 
   get "/artists/:id" do
     artist_repo = ArtistRepository.new
     @artist = artist_repo.find(params[:id])
     
-    return erb(:artist)
+    return erb(:"artists/artist")
   end
-
-  # post "/artists" do
-  #   repo = ArtistRepository.new
-  #   artist = Artist.new
-  #   artist.name = params[:name]
-  #   artist.genre = params[:genre]
-  #   repo.create(artist)
-  #   return "Artist successfully added"
-  # end
 end
 
 
